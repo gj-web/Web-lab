@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking - Confirmation</title>
+
+    <!-- Bulma CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            padding-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <!-- Header Section -->
+    <section class="hero is-primary is-small">
+        <div class="hero-body">
+            <div class="container">
+                <h1 class="title">Event Booking Page - Booking Confirmation</h1>
+            </div>
+        </div>
+    </section>
+
+    <!-- Conditional No Booking Section -->
+    <div th:if="${#lists.isEmpty(session.myBookings)}">
+        <div class="notification is-info">
+            <p>No bookings found. Please make a booking.</p>
+        </div>
+    </div>
+
+    <!-- Conditional Bookings Table Section -->
+    <div th:if="${!#lists.isEmpty(session.myBookings)}">
+        <div class="card">
+            <div class="card-content">
+                <div class="content">
+                    <h4 class="title is-4">Your Booking Status</h4>
+                    <table class="table is-bordered is-striped is-fullwidth">
+                        <thead>
+                        <tr>
+                            <th>Attendee Name</th>
+                            <th>Client IP Address</th>
+                            <th>Booking for Event</th>
+                            <th>Number of Tickets</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="booking : ${session.myBookings}">
+                            <td th:text="${booking.attendeeName}"></td>
+                            <td th:text="${booking.attendeeAddress}"></td>
+                            <td th:text="${booking.eventName}"></td>
+                            <td th:text="${booking.numberOfTickets}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> <!-- End container -->
+
+</body>
+</html>

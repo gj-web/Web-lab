@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add/Edit Event</title>
+
+  <!-- Bulma CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      padding-top: 20px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header class="has-text-centered mb-5">
+    <h1 class="title">Add/Edit Event</h1>
+  </header>
+
+  <main>
+    <!-- Form for adding or editing event -->
+    <form th:action="@{${event != null ? '/events/edit/' + event.id : '/events/add'}}" method="POST">
+      <div class="field">
+        <label for="name" class="label">Event Name</label>
+        <div class="control">
+          <input type="text" class="input" id="name" name="name"
+                 th:value="${event != null ? event.getName() : ''}" required placeholder="Enter event name">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="description" class="label">Description</label>
+        <div class="control">
+          <input type="text" class="input" id="description" name="description"
+                 th:value="${event != null ? event.getDescription() : ''}" placeholder="Enter event description">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="popularityScore" class="label">Popularity Score</label>
+        <div class="control">
+          <input type="number" class="input" id="popularityScore" name="popularityScore"
+                 th:value="${event != null ? event.getPopularityScore() : ''}"
+                 th:readonly="${event != null}" placeholder="Enter popularity score">
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Category</label>
+        <div class="control">
+          <div class="select">
+            <select name="categoryId" class="input">
+              <option th:each="cat : ${categories}" th:value="${cat.id}"
+                      th:text="${cat.category}"
+                      th:selected="${event != null && event.category.id == cat.id}">
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label">Location</label>
+        <div class="control">
+          <div class="select">
+            <select name="locationId" class="input">
+              <option th:each="loc : ${locations}" th:value="${loc.id}"
+                      th:text="${loc.address}"
+                      th:selected="${event != null && event.location.id == loc.id}">
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="control">
+        <button type="submit" class="button is-primary">Submit</button>
+        <a href="/events" class="button is-light">Back</a>
+      </div>
+    </form>
+  </main>
+</div>
+</body>
+</html>
