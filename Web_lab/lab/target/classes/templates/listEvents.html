@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Booking page - Welcome and choose an Event</title>
+
+    <!-- Bulma CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Header Section -->
+    <header class="has-text-centered mb-5">
+        <h1 class="title is-2">Welcome to our Event Booking App</h1>
+    </header>
+
+    <main>
+        <!-- Error Message Section -->
+        <div th:if="${hasError}">
+            <div class="notification is-danger">
+                <th:block th:text="${error}"></th:block>
+            </div>
+        </div>
+
+        <!-- Search Section -->
+        <div class="mb-5">
+            <form th:action='@{/events/search}' th:method="POST">
+                <label for="search" class="label">Search</label>
+                <input id="search" type="search" name="search" class="input" placeholder="Search for events">
+                <button type="submit" class="button is-primary mt-2">Search</button>
+            </form>
+        </div>
+
+        <!-- Search by Category Section -->
+        <div class="mb-5">
+            <form th:action='@{/events/searchByCategory}' th:method="POST">
+                <label for="searchByCategory" class="label">Search By Category</label>
+                <div class="select is-fullwidth">
+                    <select id="searchByCategory" name="searchByCategory">
+                        <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.category}">
+                        </option>
+                    </select>
+                </div>
+                <button type="submit" class="button is-primary mt-2">Search</button>
+            </form>
+        </div>
+
+        <h2 class="title is-4 mb-4">Choose an event:</h2>
+
+        <!-- Event Selection Form -->
+        <form th:action='@{/eventBooking/book}' th:method="POST">
+            <div class="field">
+                <label for="attName" class="label">Your Name:</label>
+                <div class="control">
+                    <input type="text" class="input" id="attName" name="attName" required placeholder="Enter your name">
+                </div>
+            </div>
+
+            <!-- Display Radio Buttons for Events -->
+            <div class="field">
+                <div class="columns is-multiline">
+                    <div th:each="event : ${events}" class="column is-4">
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="content">
+                                    <input type="radio" name="event" th:value="${event.name}">
+                                    <span class="title is-5" th:text="${event.name}"></span>
+                                    <p><strong>Description:</strong> <span th:text="${event.description}"></span></p>
+                                    <p><strong>Rating:</strong> <span th:text="${event.popularityScore}"></span></p>
+                                    <p><strong>Location:</strong> <span th:text="${event.getLocation().getAddress()}"></span></p>
+                                    <p><strong>Category:</strong> <span th:text="${event.getCategory().category}"></span></p>
+                                </div>
+                            </div>
+                            <footer class="card-footer">
+                                <a th:href="@{'/events/edit-form/{id}' (id=${event.getId()})}" class="card-footer-item">
+                                    Edit
+                                </a>
+                                <a th:href="@{'/events/delete/{id}' (id=${event.getId()})}" class="card-footer-item">
+                                    Delete
+                                </a>
+                            </footer>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Number of Tickets Section -->
+            <div class="field">
+                <label for="numTickets" class="label">Number of tickets:</label>
+                <div class="control">
+                    <input type="number" class="input" id="numTickets" name="numTickets" min="1" max="10" required>
+                </div>
+            </div>
+
+            <div class="field has-text-centered">
+                <button type="submit" class="button is-primary">Submit</button>
+            </div>
+        </form>
+
+        <!-- Add New Event Link -->
+        <div class="field mt-5">
+            <div class="control">
+                <a href="/events/add-form" class="button is-dark is-fullwidth">
+                    Add New Event
+                </a>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+</body>
+</html>
